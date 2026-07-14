@@ -1,39 +1,32 @@
 import "./globals.css";
+import { Inter } from "next/font/google";
+import Providers from "../components/Providers";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import Providers from "../components/Providers";
+
+const inter = Inter({ subsets: ["latin"] });
+
 export const metadata = {
-  title: "SentiTrack",
+  title: "SentiTrack — Social Media Sentiment Analysis",
   description:
-    "Analyze customer sentiment from social media comments across Facebook, TikTok, YouTube, Instagram, and X.",
+    "Analyze sentiment of Facebook, TikTok, YouTube, Instagram, LinkedIn, and Twitter/X comments instantly.",
 };
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var stored = localStorage.getItem('sentitrack-theme') || 'system';
-                  var resolved = stored === 'system'
-                    ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-                    : stored;
-                  document.documentElement.setAttribute('data-theme', resolved);
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
       </head>
-      <body>
+      <body className={inter.className} suppressHydrationWarning>
         <Providers>
-          <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-            <Navbar />
-            <main style={{ flex: 1 }}>{children}</main>
-            <Footer />
-          </div>
+          <Navbar />
+          <main style={{ minHeight: "calc(100vh - 68px - 240px)" }}>
+            {children}
+          </main>
+          <Footer />
         </Providers>
       </body>
     </html>

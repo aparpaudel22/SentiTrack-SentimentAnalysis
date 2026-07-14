@@ -1,13 +1,19 @@
 "use client";
+
 import { SessionProvider } from "next-auth/react";
-import { ThemeProvider } from "../lib/theme-context";
 import { AuthProvider } from "../lib/auth-context";
+import { ThemeProvider } from "../lib/theme-context";
+import ThemeInit from "./ThemeInit";
+
 export default function Providers({ children }) {
   return (
     <SessionProvider>
-      <ThemeProvider>
-        <AuthProvider>{children}</AuthProvider>
-      </ThemeProvider>
+      <AuthProvider>
+        <ThemeProvider>
+          <ThemeInit />
+          {children}
+        </ThemeProvider>
+      </AuthProvider>
     </SessionProvider>
   );
 }

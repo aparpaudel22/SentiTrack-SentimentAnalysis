@@ -9,6 +9,7 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import EmptyState from "../../components/EmptyState";
 import { useAuth } from "../../lib/auth-context";
 import { exportReportAsPDF, exportReportAsCSV } from "../../lib/export";
+
 export default function AnalyzePage() {
   return (
     <ProtectedRoute>
@@ -16,11 +17,13 @@ export default function AnalyzePage() {
     </ProtectedRoute>
   );
 }
+
 function AnalyzeContent() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
+
   async function handleSubmit(payload) {
     setLoading(true);
     setError("");
@@ -38,13 +41,16 @@ function AnalyzeContent() {
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Something went wrong.");
       setData(result);
-      saveToHistory(user.email, result);
+      if (user?.email) {
+        saveToHistory(user.email, result);
+      }
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   }
+
   return (
     <div className="container-page" style={{ paddingTop: 48, paddingBottom: 64 }}>
       <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 6 }}>Analyze Sentiment</h1>
@@ -87,6 +93,7 @@ function AnalyzeContent() {
     </div>
   );
 }
+
 function saveToHistory(email, result) {
   const key = `sentitrack-history-${email}`;
   const existing = JSON.parse(window.localStorage.getItem(key) || "[]");
